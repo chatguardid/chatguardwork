@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Identity Verification | ChatGuard Pro</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f7fb;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .verification-container {
+            width: 100%;
+            max-width: 500px;
+            background: white;
+            border-radius: 16px;
+            padding: 35px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+        }
+
+        .persona-brand {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 25px;
+            color: #111827;
+            font-size: 28px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+
+        .persona-mark {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            background: #111827;
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            font-weight: 700;
+        }
+
+        h1 {
+            text-align: center;
+            color: #1f2937;
+            margin-bottom: 12px;
+        }
+
+        .intro {
+            text-align: center;
+            color: #6b7280;
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+
+        .step {
+            border: 1px solid #e5e7eb;
+            border-radius: 10px;
+            padding: 18px;
+            margin-bottom: 15px;
+        }
+
+        .step h3 {
+            color: #1f2937;
+            margin-bottom: 7px;
+        }
+
+        .step p {
+            color: #6b7280;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .upload-box {
+            margin-top: 12px;
+        }
+
+        input[type="file"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+        }
+
+        .document-select {
+            width: 100%;
+            padding: 11px 12px;
+            margin-top: 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            font-size: 14px;
+            background: #ffffff;
+            color: #1f2937;
+            outline: none;
+        }
+
+        .document-select:focus {
+            border-color: #2563eb;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+        }
+
+        .phone-verification {
+            border: 1px solid #e5e7eb;
+            border-radius: 10px;
+            padding: 18px;
+            margin-bottom: 15px;
+        }
+
+        .phone-verification h3 {
+            color: #1f2937;
+            margin-bottom: 7px;
+        }
+
+        .phone-verification p {
+            color: #6b7280;
+            font-size: 14px;
+            line-height: 1.5;
+            margin-bottom: 12px;
+        }
+
+        .phone-row {
+            display: grid;
+            grid-template-columns: minmax(150px, 0.9fr) minmax(0, 1.6fr);
+            gap: 10px;
+        }
+
+        .phone-row select,
+        .phone-row input {
+            width: 100%;
+            padding: 11px 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            font-size: 14px;
+            background: #ffffff;
+            color: #1f2937;
+            outline: none;
+        }
+
+        .phone-row select:focus,
+        .phone-row input:focus {
+            border-color: #2563eb;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+        }
+
+        .phone-message {
+            display: none;
+            margin-top: 10px;
+            padding: 10px 12px;
+            border-radius: 8px;
+            font-size: 13px;
+            line-height: 1.4;
+        }
+
+        .otp-box {
+            display: none;
+            margin-top: 12px;
+        }
+
+        .otp-box input {
+            width: 100%;
+            padding: 11px 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            font-size: 16px;
+            letter-spacing: 3px;
+            text-align: center;
+            outline: none;
+        }
+
+        .otp-box input:focus {
+            border-color: #2563eb;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+        }
+
+        .otp-code {
+            display: none;
+            margin-top: 10px;
+            padding: 10px 12px;
+            border-radius: 8px;
+            background: #eff6ff;
+            color: #1d4ed8;
+            text-align: center;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .verify-btn {
+            width: 100%;
+            padding: 15px;
+            margin-top: 15px;
+            border: none;
+            border-radius: 10px;
+            background: #2563eb;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .verify-btn:hover {
+            background: #1d4ed8;
+        }
+
+        .verify-btn:disabled {
+            background: #9ca3af;
+            cursor: not-allowed;
+        }
+
+        .message {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            display: none;
+        }
+
+        .security-note {
+            text-align: center;
+            font-size: 12px;
+            color: #9ca3af;
+            margin-top: 20px;
+            line-height: 1.5;
+        }
+
+        .verification-timeline {
+            margin-top: 25px;
+            padding: 20px;
+            border: 1px solid #e5e7eb;
+            border-radius: 10px;
+            background: #f8fafc;
+        }
+
+        .verification-timeline h3 {
+            color: #1f2937;
+            margin-bottom: 18px;
+            font-size: 17px;
+        }
+
+        .timeline-item {
+            position: relative;
+            padding-left: 28px;
+            padding-bottom: 18px;
+            border-left: 2px solid #dbeafe;
+        }
+
+        .timeline-item:last-child {
+            padding-bottom: 0;
+            border-left: none;
+        }
+
+        .timeline-item::before {
+            content: "";
+            position: absolute;
+            left: -6px;
+            top: 2px;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #2563eb;
+        }
+
+        .timeline-item strong {
+            display: block;
+            color: #1f2937;
+            margin-bottom: 4px;
+            font-size: 14px;
+        }
+
+        .timeline-item span {
+            display: block;
+            color: #6b7280;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        @media (max-width: 520px) {
+            .phone-row {
+                grid-template-columns: 1fr;
+            }
+
+            .verification-container {
+                padding: 25px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="verification-container">
+
+        <div class="persona-brand">
+            <div class="persona-mark">P</div>
+            <span>Persona</span>
+        </div>
+
+        <h1>Verify Your Identity</h1>
+
+        <p class="intro">
+            Before you can access your moderator dashboard,
+            we need to confirm your identity.
+        </p>
+
+        <!-- Identity Document -->
+        <div class="step">
+
+            <h3>Step 1: Identity Verification</h3>
+
+            <p>
+                Select one of the accepted identity documents and upload it.
+            </p>
+
+            <select
+                id="idDocumentType"
+                class="document-select"
+                required
+            >
+                <option value="">Select identity document</option>
+                <option value="drivers_license">Driver's License</option>
+                <option value="passport">Passport</option>
+                <option value="residential_permit">Residential Permit</option>
+                <option value="work_permit">Work Permit</option>
+            </select>
+
+            <div class="upload-box">
+                <input
+                    type="file"
+                    id="idDocument"
+                    accept="image/*,.pdf"
+                >
+            </div>
+
+        </div>
+
+        <!-- Selfie -->
+        <div class="step">
+
+            <h3>Step 2: Upload a selfie</h3>
+
+            <p>
+                Upload a selfie for the identity check.
+            </p>
+
+            <div class="upload-box">
+                <input
+                    type="file"
+                    id="selfie"
+                    accept="image/*"
+                >
+            </div>
+
+        </div>
+
+        <!-- Address Verification -->
+        <div class="step">
+
+            <h3>Step 3: Address Verification</h3>
+
+            <p>
+                Select an accepted address document and upload a document
+                showing your current residential address.
+            </p>
+
+            <select
+                id="addressDocumentType"
+                class="document-select"
+                required
+            >
+                <option value="">Select address document</option>
+                <option value="utility_bill">Utility Bill</option>
+                <option value="bank_statement">Bank Statement</option>
+                <option value="government_correspondence">Government Correspondence</option>
+                <option value="residential_lease">Residential Lease / Agreement</option>
+            </select>
+
+            <div class="upload-box">
+                <input
+                    type="file"
+                    id="addressDocument"
+                    accept="image/*,.pdf"
+                >
+            </div>
+
+        </div>
+
+        <!-- Phone Verification -->
+        <div class="phone-verification">
+
+            <h3>Step 4: Verify your phone number</h3>
+
+            <p>
+                Select your region and enter a valid phone number from
+                the United States, Europe, or Asia.
+            </p>
+
+            <div class="phone-row">
+
+                <select
+                    id="phoneCountry"
+                    aria-label="Phone country"
+                    required
+                >
+                    <option value="">Select country</option>
+
+                    <optgroup label="United States">
+                        <option value="+1">United States (+1)</option>
+                    </optgroup>
+
+                    <optgroup label="Europe">
+                        <option value="+44">United Kingdom (+44)</option>
+                        <option value="+33">France (+33)</option>
+                        <option value="+49">Germany (+49)</option>
+                        <option value="+39">Italy (+39)</option>
+                        <option value="+34">Spain (+34)</option>
+                        <option value="+31">Netherlands (+31)</option>
+                        <option value="+32">Belgium (+32)</option>
+                        <option value="+41">Switzerland (+41)</option>
+                        <option value="+43">Austria (+43)</option>
+                        <option value="+46">Sweden (+46)</option>
+                        <option value="+47">Norway (+47)</option>
+                        <option value="+45">Denmark (+45)</option>
+                        <option value="+358">Finland (+358)</option>
+                        <option value="+353">Ireland (+353)</option>
+                        <option value="+351">Portugal (+351)</option>
+                        <option value="+30">Greece (+30)</option>
+                        <option value="+48">Poland (+48)</option>
+                        <option value="+420">Czech Republic (+420)</option>
+                        <option value="+36">Hungary (+36)</option>
+                        <option value="+40">Romania (+40)</option>
+                        <option value="+359">Bulgaria (+359)</option>
+                        <option value="+385">Croatia (+385)</option>
+                        <option value="+386">Slovenia (+386)</option>
+                        <option value="+421">Slovakia (+421)</option>
+                        <option value="+372">Estonia (+372)</option>
+                        <option value="+371">Latvia (+371)</option>
+                        <option value="+370">Lithuania (+370)</option>
+                        <option value="+354">Iceland (+354)</option>
+                        <option value="+352">Luxembourg (+352)</option>
+                        <option value="+356">Malta (+356)</option>
+                        <option value="+357">Cyprus (+357)</option>
+                    </optgroup>
+
+                    <optgroup label="Asia">
+                        <option value="+86">China (+86)</option>
+                        <option value="+81">Japan (+81)</option>
+                        <option value="+82">South Korea (+82)</option>
+                        <option value="+91">India (+91)</option>
+                        <option value="+65">Singapore (+65)</option>
+                        <option value="+60">Malaysia (+60)</option>
+                        <option value="+66">Thailand (+66)</option>
+                        <option value="+62">Indonesia (+62)</option>
+                        <option value="+63">Philippines (+63)</option>
+                        <option value="+84">Vietnam (+84)</option>
+                        <option value="+971">United Arab Emirates (+971)</option>
+                        <option value="+966">Saudi Arabia (+966)</option>
+                        <option value="+974">Qatar (+974)</option>
+                        <option value="+972">Israel (+972)</option>
+                        <option value="+90">Türkiye (+90)</option>
+                        <option value="+92">Pakistan (+92)</option>
+                        <option value="+880">Bangladesh (+880)</option>
+                        <option value="+94">Sri Lanka (+94)</option>
+                        <option value="+977">Nepal (+977)</option>
+                        <option value="+7">Kazakhstan (+7)</option>
+                    </optgroup>
+
+                </select>
+
+                <input
+                    type="tel"
+                    id="phoneNumber"
+                    name="phoneNumber"
+                    inputmode="tel"
+                    autocomplete="tel"
+                    placeholder="Enter phone number"
+                    required
+                >
+
+            </div>
+
+            <div
+                class="phone-message"
+                id="phoneMessage"
+            ></div>
+
+            <div
+                class="otp-box"
+                id="otpBox"
+            >
+                <input
+                    type="text"
+                    id="otpInput"
+                    inputmode="numeric"
+                    autocomplete="one-time-code"
+                    maxlength="6"
+                    placeholder="Enter 6-digit OTP"
+                    aria-label="One-time password"
+                >
+            </div>
+
+            <div
+                class="otp-code"
+                id="otpCode"
+            ></div>
+
+        </div>
+
+        <button
+            class="verify-btn"
+            id="verifyButton"
+            onclick="startVerification()"
+        >
+            Start Verification
+        </button>
+
+        <div
+            class="message"
+            id="verificationMessage"
+        ></div>
+
+        <div class="verification-timeline">
+
+            <h3>Account Verification Timeline</h3>
+
+            <div class="timeline-item">
+                <strong>1. Documents submitted</strong>
+                <span>
+                    Your identity document, selfie, address document,
+                    and phone verification are submitted for review.
+                </span>
+            </div>
+
+            <div class="timeline-item">
+                <strong>2. Document review — 2–3 business days</strong>
+                <span>
+                    The submitted documents will be reviewed within
+                    2–3 business days.
+                </span>
+            </div>
+
+            <div class="timeline-item">
+                <strong>3. Verification result</strong>
+                <span>
+                    You will be notified once the review is complete.
+                </span>
+            </div>
+
+        </div>
+
+        <p class="security-note">
+        </p>
+
+    </div>
+
+    <script src="verification_phone_otp_updated.js"></script>
+
+</body>
+</html>
